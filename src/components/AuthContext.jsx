@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   async function checkAuth() {
     try {
       const { accessToken, user } = await authService.refresh();
+      console.log( await accessToken, user)
 
       accessTokenService.save(accessToken);
       setUser(user);

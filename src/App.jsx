@@ -9,10 +9,11 @@ import { AuthContext } from './components/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { RequireAuth } from './components/RequireAuth';
-import { UsersPage } from './pages/UsersPage';
+import { NamesPage } from './pages/NamesPage';
 import { Loader } from './components/Loader.jsx';
 import { HomePage } from './pages/HomePage.jsx';
 import { usePageError } from './hooks/usePageError.js';
+import { RequireNonAuth } from './components/RequireNonAuth';
 
 function App() {
   const navigate = useNavigate();
@@ -34,8 +35,8 @@ function App() {
           Home
         </NavLink>
 
-        <NavLink to="/users" className="navbar-item">
-          Users
+        <NavLink to="/names" className="navbar-item">
+          Names
         </NavLink>
       </div>
 
@@ -88,17 +89,21 @@ function App() {
             path="activate/:activationToken"
             element={<AccountActivationPage />}
           />
+          
+          <Route path="/" element={<RequireNonAuth />}>
           <Route
             path="login"
             element={<LoginPage />}
           />
+          </Route>
 
           <Route path="/" element={<RequireAuth />}>
             <Route
-              path="users"
-              element={<UsersPage />}
+              path="names"
+              element={<NamesPage />}
             />
           </Route>
+
         </Routes>
       </section>
 
