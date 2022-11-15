@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   async function checkAuth() {
     try {
       const { accessToken, user } = await authService.refresh();
+      console.log( await accessToken, user)
 
       accessTokenService.save(accessToken);
       setUser(user);
@@ -35,11 +36,8 @@ export const AuthProvider = ({ children }) => {
     setUser(user);
   }
 
-  async function logout() {
-    await authService.logout();
-
-    accessTokenService.remove();
-    setUser(null);
+  async function logout(names) {
+    await authService.logout(names).then( accessTokenService.remove()).then(setUser(null))
   }
 
   const value = useMemo(() => ({

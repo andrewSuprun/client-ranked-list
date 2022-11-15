@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, NavLink } from 'react-router-dom';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -9,19 +9,41 @@ import { AuthContext } from './components/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { RequireAuth } from './components/RequireAuth';
-import { UsersPage } from './pages/UsersPage';
+import { NamesPage } from './pages/NamesPage';
 import { Loader } from './components/Loader.jsx';
 import { HomePage } from './pages/HomePage.jsx';
 import { usePageError } from './hooks/usePageError.js';
+import { RequireNonAuth } from './components/RequireNonAuth';
+import { nameService } from './services/nameService';
+import axios from 'axios';
+import { API_URL } from './config';
+import { useUnload } from './hooks/useUnload';
 
 function App() {
   const navigate = useNavigate();
   const [error, setError] = usePageError();
   const { isChecked, user, logout, checkAuth } = useContext(AuthContext);
 
+  const [names, setNames] = useState([]);
+  console.log(names)
+  const namesForLogoutUpdate = names.map((el, i)  => { return {...el, ...{rank : i +1} }})
+
+  useUnload(async e => {
+    e.preventDefault();
+    await axios.put(API_URL,
+      names.map((el, i)  => { return {...el, ...{rank : i +1} }})
+    )
+  })
+
   useEffect(() => {
     checkAuth();
-  }, []);
+    nameService.getAll()
+    .then(array => setNames(array))
+    .catch(error => {
+      setError(error.message)
+    })
+  }, [setError]);
+
 
   if (!isChecked) {
     return <Loader />
@@ -34,8 +56,8 @@ function App() {
           Home
         </NavLink>
 
-        <NavLink to="/users" className="navbar-item">
-          Users
+        <NavLink to="/names" className="navbar-item">
+          Names
         </NavLink>
       </div>
 
@@ -46,7 +68,7 @@ function App() {
               <button
                 className="button is-light has-text-weight-bold"
                 onClick={() => {
-                  logout()
+                  logout(namesForLogoutUpdate)
                     .then(() => {
                       navigate('/');
                     })
@@ -88,17 +110,21 @@ function App() {
             path="activate/:activationToken"
             element={<AccountActivationPage />}
           />
+          
+          <Route path="/" element={<RequireNonAuth />}>
           <Route
             path="login"
             element={<LoginPage />}
           />
+          </Route>
 
           <Route path="/" element={<RequireAuth />}>
             <Route
-              path="users"
-              element={<UsersPage />}
+              path="names"
+              element={<NamesPage changeNamesState={setNames} names={names} />}
             />
           </Route>
+
         </Routes>
       </section>
 

@@ -1,7 +1,8 @@
 import { httpClient } from '../http/httpClient.js';
 
 function getAll() {
-  return httpClient.get('/users')
+  return httpClient.get('/api')
 }
 
-export const userService = { getAll };
+
+export const nameService = { getAll };

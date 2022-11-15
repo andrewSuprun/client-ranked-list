@@ -20,3 +20,11 @@ $navbar-breakpoint: 480px !default;
   justify-content: center;
   align-items: center;
 }
+.wrapper {
+  display: grid;
+  grid-template-columns: 50 px 50 px;
+}
+
+.modal-backdrop {
+  z-index: -1;
+}

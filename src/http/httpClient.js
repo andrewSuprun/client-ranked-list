@@ -13,7 +13,6 @@ function onRequest(request) {
   if (accessToken) {
     request.headers['Authorization'] = `Bearer ${accessToken}`;
   }
-
   return request;
 }
 
