@@ -3,7 +3,6 @@ import Modal from 'react-bootstrap/Modal'
 import React from 'react'
 
 const MyVerticallyCenteredModal = React.memo(function MyVerticallyCenteredModal(props) {
-  console.log(props)
   return (
     <Modal
       {...props}
@@ -33,8 +32,6 @@ const MyVerticallyCenteredModal = React.memo(function MyVerticallyCenteredModal(
 
 const ModalEdit = React.memo(function ModalEdit(props) {
   const [modalShow, setModalShow] = React.useState(false)
-  console.log(props)
-
   return (
     <>
       <Button variant="primary" onClick={() => setModalShow(true)}>

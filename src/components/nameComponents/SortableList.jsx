@@ -3,7 +3,6 @@ import SortableItem from './SortableItem'
 import { SortableContainer } from 'react-sortable-hoc'
 
 
-
 const SortableList = (props) => {
   return (
     <ul className="wrapper">
@@ -11,9 +10,11 @@ const SortableList = (props) => {
         return <SortableItem
         key={`item-${index}`}
         index={index}
-        name={value}
+        name={value.name}
         rank={ index + 1}
-        id={value.split(',')[1].split(' ')[2]}
+        id={value.id}
+        changeNameFromState={props.changeNameState}
+        names={props.names}
       />
       }
       )}

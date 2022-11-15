@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { API_URL } from '../config.js';
 import { authClient } from '../http/authClient.js';
 
 function register({ email, password }) {
@@ -8,7 +10,10 @@ function login({ email, password }) {
   return authClient.post('/login', { email, password })
 }
 
-function logout() {
+async function logout(names) {
+  await axios.put(API_URL,
+    names
+  )
   return authClient.post('/logout')
 }
 

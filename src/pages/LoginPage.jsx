@@ -34,7 +34,6 @@ export const LoginPage = () => {
 
   const [error, setError] = usePageError('');
   const { login } = useContext(AuthContext);
-  console.log(navigate,'navigate111', location,'location111', login, 'login111')
 
   return (
     <>

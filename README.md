@@ -1,5 +1,6 @@
-# Login App
-This a client application for Node.js Auth lesson
-
-Run `npm ci` and `npm start` to use it with the [auth-api](https://github.com/mate-academy/nodejs-auth-api-done)
 # client-ranked-list
+This a client application for Ranked List App
+[demo video](https://www.youtube.com/watch?v=4Sgk5gMvubY)
+
+Run `npm ci` and `npm start` to use it with the [Ranked List Api](https://github.com/andrewSuprun/ranked-list)
+

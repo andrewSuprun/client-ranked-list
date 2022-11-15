@@ -1,46 +1,23 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { usePageError } from '../hooks/usePageError.js';
-import { nameService } from '../services/nameService.js';
+import React from 'react';
 import { arrayMoveImmutable } from 'array-move'
 import SortableList from '../components/nameComponents/SortableList'
 import { AddName } from '../components/nameComponents/AddName'
 
-export const NamesPage = () => {
-  const [error, setError] = usePageError('');
-  const [names, setNames] = useState([]);
-
-  useEffect(() => {
-    nameService.getAll()
-      .then(array => setNames(array.map((el) => `${el.name}, id ${el.id}`)))
-      .catch(error => {
-        setError(error.message)
-      })
-  }, [setError, setNames])
-
-  // const updateAll = useCallback(
-  //   ({ oldIndex, newIndex }) => {
-      
-  //   },
-  //   [],
-  // )
-
-  console.log('rerender in namespage')
+export const NamesPage = (props) => {
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    setNames((prevItem) => arrayMoveImmutable(prevItem, oldIndex, newIndex))
+    props.changeNamesState((prevItem) => arrayMoveImmutable(prevItem, oldIndex, newIndex))
   }
 
   return (
     <div className="content">
       <h1 className="title">Names</h1>
-    <AddName rank={names.length + 1} changeNamesState={setNames} names={names}/>
+    <AddName rank={props.names.length + 1} changeNamesState={props.changeNamesState} names={props.names}/>
       <ul>
       <div >
-      <SortableList className ={'wrapper'} items={names} onSortEnd={onSortEnd} />
+      <SortableList className ={'wrapper'} items={props.names} onSortEnd={onSortEnd} changeNameState={props.changeNamesState} names={props.names}/>
     </div>
       </ul>
-
-      {error && <p className="notification is-danger is-light">{error}</p>}
     </div>
   );
 };

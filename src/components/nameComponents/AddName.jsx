@@ -5,28 +5,22 @@ import { API_URL } from '../../config'
 export const AddName = (props) => {
   const inputRef = useRef(null)
 
-  function handleClick() {
-    console.log('value 👉️', inputRef.current.value)
+  async function handleClick() {
     const addedName = inputRef.current.value
-    const rank =  props.rank;
-    console.log(rank, "raaaaank")
-    postRequest(addedName, rank)
+    const item = await postRequest(addedName, props.rank)
+    const nameForClient = { name: addedName, id: item.data.id, rank: props.rank }
     inputRef.current.value = ''
-    props.changeNamesState([...props.names,
-       `${addedName},
-        id ${77}` ])
-    // setInterval(() => {
-    //   window.location.reload();
-    // }, 5000);
+    const State = [ ...props.names, nameForClient]
+    props.changeNamesState(State)
   }
 
   const postRequest = async (addedName, addedRank) => {
-    console.log(addedName, addedRank)
-    await axios.post(API_URL, {
+    return await axios.post(API_URL, {
       name: addedName,
       rank: addedRank,
     })
   }
+
 
   return (
     <div>

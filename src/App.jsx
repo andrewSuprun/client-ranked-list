@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, NavLink } from 'react-router-dom';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -14,15 +14,36 @@ import { Loader } from './components/Loader.jsx';
 import { HomePage } from './pages/HomePage.jsx';
 import { usePageError } from './hooks/usePageError.js';
 import { RequireNonAuth } from './components/RequireNonAuth';
+import { nameService } from './services/nameService';
+import axios from 'axios';
+import { API_URL } from './config';
+import { useUnload } from './hooks/useUnload';
 
 function App() {
   const navigate = useNavigate();
   const [error, setError] = usePageError();
   const { isChecked, user, logout, checkAuth } = useContext(AuthContext);
 
+  const [names, setNames] = useState([]);
+  console.log(names)
+  const namesForLogoutUpdate = names.map((el, i)  => { return {...el, ...{rank : i +1} }})
+
+  useUnload(async e => {
+    e.preventDefault();
+    await axios.put(API_URL,
+      names.map((el, i)  => { return {...el, ...{rank : i +1} }})
+    )
+  })
+
   useEffect(() => {
     checkAuth();
-  }, []);
+    nameService.getAll()
+    .then(array => setNames(array))
+    .catch(error => {
+      setError(error.message)
+    })
+  }, [setError]);
+
 
   if (!isChecked) {
     return <Loader />
@@ -47,7 +68,7 @@ function App() {
               <button
                 className="button is-light has-text-weight-bold"
                 onClick={() => {
-                  logout()
+                  logout(namesForLogoutUpdate)
                     .then(() => {
                       navigate('/');
                     })
@@ -100,7 +121,7 @@ function App() {
           <Route path="/" element={<RequireAuth />}>
             <Route
               path="names"
-              element={<NamesPage />}
+              element={<NamesPage changeNamesState={setNames} names={names} />}
             />
           </Route>
 

@@ -9,13 +9,10 @@ httpClient.interceptors.response.use(onResponseSuccess, onResponseError);
 
 function onRequest(request) {
   const accessToken = localStorage.getItem('accessToken');
-  console.log(accessToken)
 
   if (accessToken) {
     request.headers['Authorization'] = `Bearer ${accessToken}`;
   }
-  console.log(request.headers)
-
   return request;
 }
 
@@ -32,7 +29,6 @@ async function onResponseError(error) {
 
   try {
     const { accessToken } = await authService.refresh();
-    console.log(await accessToken)
 
     accessTokenService.save(accessToken);
 

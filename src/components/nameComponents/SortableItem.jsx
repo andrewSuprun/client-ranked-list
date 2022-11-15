@@ -7,56 +7,36 @@ import { API_URL } from '../../config'
 import axios from 'axios'
 
 const SortableItem = (props) => {
-  const [isDeleted, setDeleted] = useState(false)
   const inputRef = useRef(null)
   const [isEdited, setEdited] = useState(false);
 
   const sendDeleteRequest = useCallback(async () => {
-    console.log(props.id)
-    if (isDeleted) return
-
-    console.log(`${API_URL}names/${props.id}`)
     await axios.delete(`${API_URL}names/${props.id}`)
-    console.log('here')
-    setDeleted(true)
-  }, [props.id, isDeleted])
+    const deletedItem = props.names[props.rank - 1]
+    props.changeNameFromState([...props.names.filter(item => item !== deletedItem)])
+  }, [props])
 
-  
 
 
   const sendEditRequest = useCallback(
     async () => {
-      console.log('value 👉️', inputRef.current.value)
       const input = inputRef.current.value
-      putRequest(props.id, input)
-      .then(setEdited(true))
+      const editedName = await putRequest(props.id, input)
+
       inputRef.current.value = ''
+      props.changeNameFromState([...props.names, editedName
+      ])
     },
     [props.id],
   )
 
   const putRequest = async (id, input) => {
-    await axios.put(`${API_URL}names/${id}`, {
+    return await axios.put(`${API_URL}names/${id}`, {
       name: input,
     })
   }
 
-  const getOneName = async (id, input) => {
-    await axios.get(`${API_URL}names/${id}`)
-  }
 
-  if (isDeleted) {
-    return <></>
-  }
-  if (isEdited) {
-    return (
-      <li>
-        <div>
-        {"pipka"}{[props.rank]}
-        </div>
-      </li>
-    )
-  }
     return (
       <li>
         <div>
