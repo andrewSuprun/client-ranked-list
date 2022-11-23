@@ -28,12 +28,12 @@ function App() {
   console.log(names)
   const namesForLogoutUpdate = names.map((el, i)  => { return {...el, ...{rank : i +1} }})
 
-  useUnload(async e => {
-    e.preventDefault();
-    await axios.put(API_URL,
-      names.map((el, i)  => { return {...el, ...{rank : i +1} }})
-    )
-  })
+  // useUnload(async e => {
+  //   e.preventDefault();
+  //   await axios.put(API_URL,
+  //     names.map((el, i)  => { return {...el, ...{rank : i +1} }})
+  //   )
+  // }) // causes bags with edit functionality 
 
   useEffect(() => {
     checkAuth();
