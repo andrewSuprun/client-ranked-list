@@ -20,7 +20,7 @@ function validateEmail(value) {
 
 function validatePassword(value) {
   if (!value) {
-    return 'Password is required!';
+    return 'Password is required';
   }
     
   if (value.length < 6) {
